@@ -10,26 +10,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Checkout código
+        uses: actions/checkout@v4
 
-      - name: Run Satis in Docker
+      - name: Configurar Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build da imagem e geração do Satis
         run: |
-          mkdir public dist
-          docker run --rm \
-            -v ${{ github.workspace }}/satis.json:/satis.json \
-            -v ${{ github.workspace }}/packages:/packages \
-            -v ${{ github.workspace }}/public:/public \
-            -v ${{ github.workspace }}/dist:/dist \
-            composer/satis build /satis.json /public
+          docker compose up --build
+          docker cp satis-server:/satis/public/. ./public
+          docker compose down -v
 
-      - name: Move dist into public/dist
-        run: |
-          mkdir -p public/dist
-          cp -r dist/* public/dist/
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Deploy para GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
