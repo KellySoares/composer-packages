@@ -22,7 +22,7 @@ jobs:
     
       - name: Build da imagem e geração do Satis
         run: |
-          docker create --name temp-satis satis-server
+          docker create --name satis-server satis-image
           mkdir -p public
           docker cp satis-server:/satis/public/. ./public
           docker rm temp-satis
