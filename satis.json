@@ -1,6 +1,7 @@
 {
   "name": "kellysoares/composer-packages",
-  "homepage": "https://KellySoares.github.io/composer-packages",
+  "homepage": "https://KellySoares.github.io/composer-packages/",
+  "require-all": true,
   "repositories": [
     { "type": "vcs", "url": "packages/monolog" },
     { "type": "vcs", "url": "packages/zf-deploy" },
@@ -12,6 +13,7 @@
     "monolog/monolog": "3.9.0"
   },
   "output-dir": "public",
+  "output-html": true,
   "archive": {
     "directory": "dist",
     "format": "zip",
