@@ -22,6 +22,8 @@ jobs:
           CONTAINER_ID=$(docker create satis-server)
           mkdir -p public
           docker cp $CONTAINER_ID:/var/www/html/. ./public
+          docker cp $CONTAINER_ID:/var/www/html/dist ./public/dist
+          docker cp $CONTAINER_ID:/var/www/html/p2 ./public/p2
           docker rm $CONTAINER_ID
 
       - name: Deploy para GitHub Pages
