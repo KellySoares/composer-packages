@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  satis:
+    build:
+      context: .
+    container_name: satis-server
+    ports:
+      - "8080:80"
+    restart: unless-stopped

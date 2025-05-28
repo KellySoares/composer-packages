@@ -1,0 +1,20 @@
+{
+  "name": "kellysoares/composer-packages",
+  "homepage": "https://KellySoares.github.io/composer-packages",
+  "repositories": [
+    { "type": "vcs", "url": "packages/monolog" },
+    { "type": "vcs", "url": "packages/zf-deploy" },
+    { "type": "vcs", "url": "packages/zf-apigility-admin" }
+  ],
+    "require": {
+    "zfcampus/zf-deploy": "*",
+    "zfcampus/zf-apigility-admin": "1.6.*",
+    "monolog/monolog": "3.9.0"
+  },
+  "output-dir": "public",
+  "archive": {
+    "directory": "dist",
+    "format": "zip",
+    "skip-dev": true
+  }
+}

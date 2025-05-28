@@ -1,0 +1,30 @@
+name: Build and Deploy Satis
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build da imagem e geração do Satis
+        run: |
+          docker build -t satis .
+          CONTAINER_ID=$(docker create satis)
+          docker cp $CONTAINER_ID:/var/www/html ./public
+          docker rm $CONTAINER_ID
+
+      - name: Deploy para GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
