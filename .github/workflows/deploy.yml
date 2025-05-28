@@ -19,12 +19,12 @@ jobs:
       - name: Build da imagem e geração do Satis
         run: |
           docker build -t satis-server .
-          CONTAINER_ID=$(docker create satis-server)
+          docker create --name satis-container satis-server
           mkdir -p public
-          docker cp $CONTAINER_ID:/var/www/html/. ./public
-          docker cp $CONTAINER_ID:/var/www/html/dist ./public/dist
-          docker cp $CONTAINER_ID:/var/www/html/p2 ./public/p2
-          docker rm $CONTAINER_ID
+          docker cp satis-container:/var/www/html/. ./public
+          docker cp satis-container:/var/www/html/dist ./public/dist
+          docker cp satis-container:/var/www/html/p2 ./public/p2
+          docker rm satis-container
 
       - name: Deploy para GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
