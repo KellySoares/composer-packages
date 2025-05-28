@@ -1,9 +1,9 @@
-# .github/workflows/deploy.yml
-name: Deploy Satis
+name: Build and Deploy Satis
 
 on:
   push:
-    branches: [ main ]
+    branches: [master]
+  workflow_dispatch: 
 
 jobs:
   build-and-deploy:
@@ -23,8 +23,14 @@ jobs:
             -v ${{ github.workspace }}/dist:/dist \
             composer/satis build /satis.json /public
 
+      - name: Move dist into public/dist
+        run: |
+          mkdir -p public/dist
+          cp -r dist/* public/dist/
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
+          publish_branch: gh-pages
