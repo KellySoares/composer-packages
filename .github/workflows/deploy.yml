@@ -1,34 +1,30 @@
-name: Build and Deploy Satis
+# .github/workflows/deploy.yml
+name: Deploy Satis
 
 on:
   push:
-    branches: [master]
-  workflow_dispatch: 
+    branches: [ main ]
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout código
-        uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      - name: Configurar Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build da imagem e geração do Satis
+      - name: Run Satis in Docker
         run: |
-          docker build -t satis-server .
-          docker create --name satis-container satis-server
-          mkdir -p public
-          docker cp satis-container:/var/www/html/. ./public
-          docker cp satis-container:/var/www/html/dist ./public/dist
-          docker cp satis-container:/var/www/html/p2 ./public/p2
-          docker rm satis-container
+          mkdir public dist
+          docker run --rm \
+            -v ${{ github.workspace }}/satis.json:/satis.json \
+            -v ${{ github.workspace }}/packages:/packages \
+            -v ${{ github.workspace }}/public:/public \
+            -v ${{ github.workspace }}/dist:/dist \
+            composer/satis build /satis.json /public
 
-      - name: Deploy para GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
-          publish_branch: gh-pages
