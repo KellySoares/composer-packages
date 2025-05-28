@@ -18,9 +18,10 @@ jobs:
 
       - name: Build da imagem e geração do Satis
         run: |
-          docker build -t satis .
-          CONTAINER_ID=$(docker create satis)
-          docker cp $CONTAINER_ID:/var/www/html ./public
+          docker-compose up --build
+          CONTAINER_ID=$(docker create satis-server)
+          mkdir -p public
+          docker cp $CONTAINER_ID:/var/www/html/. ./public
           docker rm $CONTAINER_ID
 
       - name: Deploy para GitHub Pages
