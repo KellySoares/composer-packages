@@ -1,0 +1,11 @@
+FROM composer:2 AS satis-builder
+
+RUN composer create-project --keep-vcs --no-dev composer/satis:dev-main /satis
+
+WORKDIR /satis
+
+COPY satis.json .
+COPY packages/ ./packages/
+
+RUN php bin/satis build satis.json public
+
