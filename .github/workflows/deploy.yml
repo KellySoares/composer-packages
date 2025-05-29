@@ -20,13 +20,11 @@ jobs:
         run: |
             docker compose build
     
-      - name: Build da imagem e geração do Satis
+      - name: Create container e geração do Satis
         run: |
           docker create --name satis-server satis-image
           mkdir -p public
           docker cp satis-server:/satis/public/. ./public
-          docker rm satis-server
-          docker rmi satis-image
 
       - name: Deploy para GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
@@ -34,3 +32,8 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
           publish_branch: gh-pages
+          
+      - name: Limpar container e imagem do Satis
+        run: |
+          docker rm -f satis-server || true
+          docker rmi -f satis-image || true
