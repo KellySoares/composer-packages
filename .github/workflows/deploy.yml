@@ -25,7 +25,8 @@ jobs:
           docker create --name satis-server satis-image
           mkdir -p public
           docker cp satis-server:/satis/public/. ./public
-          docker rm temp-satis
+          docker rm satis-server
+          docker rmi satis-image
 
       - name: Deploy para GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
