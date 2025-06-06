@@ -1,12 +1,18 @@
 version: '3.8'
 
+networks:
+    nw-vault-composer:
+        driver: bridge
+        name: nw-vault-composer 
 services:
   satis:
     build:
       context: .
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile
     image: satis-image:latest
     container_name: satis-server
     ports:
-      - "8080:80"
+      - "10310:80"
     restart: unless-stopped
+    networks:
+      - nw-vault-composer
